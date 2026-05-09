@@ -2,38 +2,38 @@
 
 export const cores = {
 
-  primaria: '#a4a1a4ff',       // azul escuro — fundo do card de saldo
+  primaria: '#2c3e50',       // azul escuro — fundo do card de saldo
 
-  receita: '#7B68EE',        // verde — receitas, mudança feita pelo lu
+  receita: '#2ecc71',        // verde — receitas
 
-  despesa: '#b11010ff',        // vermelho — despesas
+  despesa: '#e74c3c',        // vermelho — despesas
 
-  receitaFundo: '#ccc6cfff',   // verde claro — fundo do ícone de receita
+  receitaFundo: '#d5f5e3',   // verde claro — fundo do ícone de receita
 
-  despesaFundo: '#91d1e2ff',   // vermelho claro — fundo do ícone de despesa
+  despesaFundo: '#fadbd8',   // vermelho claro — fundo do ícone de despesa
 
-  fundo: '#edededff',          // cinza muito claro — fundo da tela
+  fundo: '#f5f6fa',          // cinza muito claro — fundo da tela
 
-  cartao: '#89cf9bff',         // branco — fundo dos cards
+  cartao: '#ffffff',         // branco — fundo dos cards
 
   texto: '#2c3e50',          // azul escuro — texto principal
 
-  subtexto: '#011213ff',       // cinza — texto secundário
+  subtexto: '#95a5a6',       // cinza — texto secundário
 
-  alerta: '#f34e12ff',         // laranja — avisos
+  alerta: '#f39c12',         // laranja — avisos
 
 };
 
 
 export const espacamento = {
 
-  xs: 14,
+  xs: 4,
 
-  sm: 18,
+  sm: 8,
 
-  md: 20,
+  md: 16,
 
-  lg: 30,
+  lg: 24,
 
   xl: 32,
 
@@ -42,12 +42,10 @@ export const espacamento = {
 
 export const raio = {
 
-  sm: 15,
+  sm: 8,
 
-  md: 16,
+  md: 12,
 
-  lg: 18,
+  lg: 16,
 
-  pill: 99,
-
-};
+}

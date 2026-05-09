@@ -7,7 +7,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { cores, espacamento, raio } from '../theme';
 
 
-// Mapeamento de categoria para ícone Ionicons
 
 const ICONES = {
 
@@ -30,7 +29,7 @@ const ICONES = {
 };
 
 
-export function ItemTransacao({ descricao, valor, categoria, tipo, data, onPress }) {
+export function ItemTransacao({ descricao, valor, categoria, tipo, data, onPress, onLongPress }) { 
 
   const isReceita = tipo === 'receita';
 
@@ -39,9 +38,19 @@ export function ItemTransacao({ descricao, valor, categoria, tipo, data, onPress
 
   return (
 
-    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity
 
-      {/* Ícone da categoria */}
+      style={styles.container}
+
+      onPress={onPress}
+
+      onLongPress={onLongPress}                                                                    
+
+      activeOpacity={0.7}
+
+    >
+
+   
 
       <View style={[
 
@@ -64,7 +73,7 @@ export function ItemTransacao({ descricao, valor, categoria, tipo, data, onPress
       </View>
 
 
-      {/* Descrição e data */}
+      
 
       <View style={styles.info}>
 
@@ -75,7 +84,7 @@ export function ItemTransacao({ descricao, valor, categoria, tipo, data, onPress
       </View>
 
 
-      {/* Valor */}
+     
 
       <Text style={[styles.valor, { color: isReceita ? cores.receita : cores.despesa }]}>
 
@@ -106,7 +115,7 @@ const styles = StyleSheet.create({
 
     marginBottom: espacamento.sm,
 
-    // Sombra (iOS):
+
 
     shadowColor: '#000',
 
@@ -116,7 +125,7 @@ const styles = StyleSheet.create({
 
     shadowRadius: 4,
 
-    // Sombra (Android):
+  
 
     elevation: 2,
 
@@ -128,7 +137,7 @@ const styles = StyleSheet.create({
 
     height: 44,
 
-    borderRadius: 22,            // círculo perfeito (metade do width/height)
+    borderRadius: 22,            
 
     justifyContent: 'center',
 
@@ -140,8 +149,7 @@ const styles = StyleSheet.create({
 
   info: {
 
-    flex: 1,                     // ocupa todo o espaço entre o ícone e o valor
-
+    flex: 1,                     
   },
 
   descricao: {

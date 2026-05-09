@@ -1,214 +1,74 @@
 // App.js
 
-import { StatusBar } from 'expo-status-bar';
+import React from 'react';
 
-import { ScrollView, View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 
-import { PaperProvider } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { CartaoSaldo } from './components/CartaoSaldo';
+import { TabRoutes } from './routes/TabRoutes';
 
-import { CardsResumo } from './components/CardsResumo';
+import { TransacoesProvider } from './context/TransacoesContext';
 
-import { ItemTransacao } from './components/ItemTransacao';
+import { BoasVindasScreen } from './screens/BoasVindasScreen';
 
-import { cores, espacamento } from './theme';
+import {
 
+  PrimeiroAcessoProvider,
 
-// Dados estáticos para demonstração (na Aula 4, virão do AsyncStorage)
+  usePrimeiroAcesso,
 
-const TRANSACOES = [
-
-  { id: '1', descricao: 'Salário', valor: 5200, tipo: 'receita', categoria: 'salario', data: '01/05/2026' },
-
-  { id: '2', descricao: 'Jogo', valor: 90, tipo: 'outros', categoria: 'moradia', data: '05/05/2026' },
-
-  { id: '3', descricao: 'Supermercado', valor: 280.50, tipo: 'despesa', categoria: 'alimentacao', data: '07/05/2026' },
-
-  { id: '4', descricao: 'Roupas', valor: 500, tipo: 'receita', categoria: 'salario', data: '10/05/2026' },
-
-  { id: '5', descricao: 'Uber', valor: 35.90, tipo: 'despesa', categoria: 'transporte', data: '11/05/2026' },
-
-  { id: '6', descricao: 'Remdios', valor: 89.90, tipo: 'despesa', categoria: 'saude', data: '12/05/2026' },
-
-];
-
-let nome = "Luciano dos Santos Nascimento"
-
-const imagem = <img src="https://otempo.scene7.com/is/image/sempreeditora/frieren-ranking-oficial-revela-personagem-mais-popular?qlt=90&wid=1200&ts=1777743015143&dpr=off" alt='frierem'/>
-export default function App() {
-
-  // Calcula receitas, despesas e saldo
-
-  const receitas = TRANSACOES
-
-    .filter(t => t.tipo === 'receita')
-
-    .reduce((acc, t) => acc + t.valor, 0);
+} from './context/PrimeiroAcessoContext';
 
 
-  const despesas = TRANSACOES
+function ConteudoApp() {
 
-    .filter(t => t.tipo === 'despesa')
-
-    .reduce((acc, t) => acc + t.valor, 0);
+  const { primeiroAcesso, carregando, concluir } = usePrimeiroAcesso();
 
 
-  const saldo = receitas - despesas;
+  // Enquanto lê o AsyncStorage, evita o flash da tela de boas-vindas
+
+  if (carregando) return null;
+
+
+  if (primeiroAcesso) {
+
+    return <BoasVindasScreen onConcluir={concluir} />;
+
+  }
 
 
   return (
 
-    <PaperProvider>
+    <TransacoesProvider>
 
-      <SafeAreaView style={styles.safeArea}>
+      <NavigationContainer>
 
-        <StatusBar style="light" />
+        <TabRoutes />
 
+      </NavigationContainer>
 
-        <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-
-          {/* Cabeçalho */}
-
-          <View style={styles.cabecalho}>
-
-            <Text style={styles.tituloCabecalho}>Minhas Finanças do Luciano</Text>
-
-            <Text style={styles.subtituloCabecalho}>Maio 2026</Text>
-
-          </View>
-
-
-          {/* Cards de resumo */}
-
-          <CardsResumo receitas={receitas} despesas={despesas} />
-
-
-          {/* Lista de transações */}
-
-          <View style={styles.secao}>
-
-            <Text style={styles.tituloSecao}>Transações feitas Recentes pelo {nome}</Text>
-
-            {TRANSACOES.map(transacao => (
-
-              <ItemTransacao
-
-                key={transacao.id}
-
-                descricao={transacao.descricao}
-
-                valor={transacao.valor}
-
-                tipo={transacao.tipo}
-
-                categoria={transacao.categoria}
-
-                data={transacao.data}
-
-                onPress={() => console.log('Tocou em:', transacao.descricao)}
-
-              />
-
-            ))}
-
-            {/* Card de saldo */}
-
-            <CartaoSaldo saldo={saldo} mes="Maio" />
-
-          </View>
-
-          
-          
-
-        </ScrollView>
-
-      </SafeAreaView>
-
-    </PaperProvider>
+    </TransacoesProvider>
 
   );
 
 }
 
 
-const styles = StyleSheet.create({
+export default function App() {
 
-  safeArea: {
+  return (
 
-    flex: 1,
+    <SafeAreaProvider>
 
-    backgroundColor: cores.primaria,
-    
-    // cor escura no topo (status bar area)
-    paddingTop: 20,
+      <PrimeiroAcessoProvider>
 
-    gap: 30,
+        <ConteudoApp />
 
-    paddingBottom: 20,
+      </PrimeiroAcessoProvider>
 
+    </SafeAreaProvider>
 
-  },
+  );
 
-  scroll: {
-
-    flex: 1,
-
-    backgroundColor: cores.fundo,
-
-  
-
-  },
-
-  cabecalho: {
-
-    backgroundColor: cores.primaria,
-
-    paddingHorizontal: espacamento.md,
-
-    paddingVertical: espacamento.lg,
-
-  },
-
-  tituloCabecalho: {
-
-    color: '#fff',
-
-    fontSize: 22,
-
-    fontWeight: 'bold',
-
-  },
-
-  subtituloCabecalho: {
-
-    color: '#bdc3c7',
-
-    fontSize: 14,
-
-    marginTop: 2,
-
-  },
-
-  secao: {
-
-    padding: espacamento.md,
-
-    marginTop: espacamento.sm,
-
-  },
-
-  tituloSecao: {
-
-    fontSize: 17,
-
-    fontWeight: '700',
-
-    color: cores.texto,
-
-    marginBottom: espacamento.md,
-    
-
-  },
-
-});
+}
