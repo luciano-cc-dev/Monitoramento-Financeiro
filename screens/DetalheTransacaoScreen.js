@@ -2,7 +2,13 @@
 
 import React from 'react';
 
-import { View, Text, StyleSheet, TouchableOpacity, Alert, Platform } from 'react-native';
+import {
+
+  View, Text, StyleSheet, TouchableOpacity,
+
+  Alert, Platform, Image, ScrollView                     // ← NOVO: Image e ScrollView
+
+} from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -15,7 +21,7 @@ import { cores, espacamento, raio } from '../theme';
 
 export function DetalheTransacaoScreen({ route, navigation }) {
 
-  const { transacao } = route.params;  // recebe os dados via navigate()
+  const { transacao } = route.params;
 
   const isReceita = transacao.tipo === 'receita';
 
@@ -34,10 +40,6 @@ export function DetalheTransacaoScreen({ route, navigation }) {
 
     };
 
-
-    // No react-native-web, Alert.alert ignora os botões e nunca chama onPress.
-
-    // Usamos window.confirm para que a confirmação funcione no Expo Web.
 
     if (Platform.OS === 'web') {
 
@@ -71,10 +73,10 @@ export function DetalheTransacaoScreen({ route, navigation }) {
 
     <SafeAreaView style={styles.safeArea}>
 
-      <View style={styles.container}>
+      {/* ← NOVO: ScrollView para permitir rolar quando há foto de comprovante */}
 
+      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
 
- 
 
         <TouchableOpacity style={styles.botaoVoltar} onPress={() => navigation.goBack()}>
 
@@ -83,7 +85,6 @@ export function DetalheTransacaoScreen({ route, navigation }) {
           <Text style={styles.textoVoltar}>Voltar</Text>
 
         </TouchableOpacity>
-
 
 
         <View style={[styles.icone, { backgroundColor: isReceita ? cores.receitaFundo : cores.despesaFundo }]}>
@@ -136,7 +137,41 @@ export function DetalheTransacaoScreen({ route, navigation }) {
 
           </View>
 
+
+          {/* ← NOVO: mostra coordenadas se existirem */}
+
+          {transacao.latitude != null && transacao.longitude != null && (
+
+            <View style={styles.linha}>
+
+              <Text style={styles.rotulo}>Local</Text>
+
+              <Text style={styles.dado}>
+
+                {transacao.latitude.toFixed(4)}, {transacao.longitude.toFixed(4)}
+
+              </Text>
+
+            </View>
+
+          )}
+
         </View>
+
+
+        {/* ← NOVO: mostra a foto do comprovante se existir */}
+
+        {transacao.comprovante && (
+
+          <View style={styles.comprovanteWrapper}>
+
+            <Text style={styles.comprovanteTitulo}>Comprovante</Text>
+
+            <Image source={{ uri: transacao.comprovante }} style={styles.comprovante} resizeMode="contain" />
+
+          </View>
+
+        )}
 
 
         <TouchableOpacity
@@ -157,7 +192,7 @@ export function DetalheTransacaoScreen({ route, navigation }) {
 
         </TouchableOpacity>
 
-      </View>
+      </ScrollView>
 
     </SafeAreaView>
 
@@ -170,7 +205,17 @@ const styles = StyleSheet.create({
 
   safeArea: { flex: 1, backgroundColor: cores.fundo },
 
-  container: { flex: 1, padding: espacamento.md, alignItems: 'center' },
+  container: {
+
+    flexGrow: 1,                       // ← NOVO: dentro de ScrollView, flex vira flexGrow
+
+    padding: espacamento.md,
+
+    paddingBottom: espacamento.xl,     // ← NOVO: respiro pro botão Excluir não colar na borda
+
+    alignItems: 'center',
+
+  },
 
   botaoVoltar: {
 
@@ -210,27 +255,49 @@ const styles = StyleSheet.create({
 
   dado: { fontSize: 14, fontWeight: '600', color: cores.texto },
 
-  botaoExcluir: {
 
-    flexDirection: 'row',
+  // ← NOVO: comprovante
 
-    alignItems: 'center',
-
-    justifyContent: 'center',
-
-    gap: 8,
+  comprovanteWrapper: {
 
     width: '100%',
 
     marginTop: espacamento.lg,
 
-    paddingVertical: espacamento.md,
+    alignItems: 'center',
+
+  },
+
+  comprovanteTitulo: {
+
+    fontSize: 14, fontWeight: '600', color: cores.subtexto,
+
+    marginBottom: espacamento.sm, alignSelf: 'flex-start',
+
+  },
+
+  comprovante: {
+
+    width: '100%', height: 280,
 
     borderRadius: raio.md,
 
-    borderWidth: 1,
+    backgroundColor: '#eee',
 
-    borderColor: cores.despesa,
+  },
+
+
+  botaoExcluir: {
+
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+
+    gap: 8, width: '100%',
+
+    marginTop: espacamento.lg,
+
+    paddingVertical: espacamento.md,
+
+    borderRadius: raio.md, borderWidth: 1, borderColor: cores.despesa,
 
     backgroundColor: 'transparent',
 

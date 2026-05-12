@@ -1,32 +1,77 @@
 {
+
   "expo": {
+
     "name": "minhas-financas",
+
     "slug": "minhas-financas",
+
     "version": "1.0.0",
+
     "orientation": "portrait",
+
     "icon": "./assets/icon.png",
+
     "userInterfaceStyle": "light",
+
     "newArchEnabled": true,
+
     "splash": {
+
       "image": "./assets/splash-icon.png",
+
       "resizeMode": "contain",
+
       "backgroundColor": "#ffffff"
+
     },
+
     "ios": {
+
       "supportsTablet": true
+
     },
+
     "android": {
+
       "adaptiveIcon": {
+
         "foregroundImage": "./assets/adaptive-icon.png",
+
         "backgroundColor": "#ffffff"
+
       },
+
       "edgeToEdgeEnabled": true
+
     },
+
     "web": {
+
       "favicon": "./assets/favicon.png"
+
     },
+
     "plugins": [
-      "expo-sqlite"
+
+      "expo-sqlite",
+
+      "expo-location",
+
+      [
+
+        "expo-image-picker",
+
+        {
+
+          "cameraPermission": "Permita o acesso à câmera para fotografar comprovantes."
+
+        }
+
+      ]
+
     ]
+
   }
+
 }
